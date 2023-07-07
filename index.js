@@ -2,6 +2,7 @@ const express = require("express");
 const dbConnect = require("./config/dbConnect");
 const app = express();
 const dotenv = require("dotenv").config();
+
 const POST = process.env.POST || 4000;
 const authRouter = require("./routes/authRoute");
 const productRouter = require("./routes/productRoute");
