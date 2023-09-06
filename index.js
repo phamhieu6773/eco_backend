@@ -19,11 +19,12 @@ const bodyParser = require("body-parser");
 const { notFound, errorHandler } = require("./middlewares/errorHandler");
 const cookieParser = require("cookie-parser");
 const morgan = require("morgan");
-const cros = require("cros");
+const cors = require("cors");
+
 dbConnect();
 
 app.use(morgan("dev"));
-app.use(cros());
+app.use(cors());
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(cookieParser());
