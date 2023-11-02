@@ -52,6 +52,7 @@ const loginUserCtrl = asyncHandler(async (req, res) => {
       email: findUser?.email,
       mobile: findUser?.mobile,
       token: generateToken(findUser?._id),
+      refreshToken: refreshToken,
     });
   } else {
     throw new Error("Thông tin không hợp lệ");
@@ -85,6 +86,7 @@ const loginAdmin = asyncHandler(async (req, res) => {
       email: findAdmin?.email,
       mobile: findAdmin?.mobile,
       token: generateToken(findAdmin?._id),
+      refreshToken: refreshToken,
     });
   } else {
     throw new Error("Thông tin không hợp lệ");
@@ -94,23 +96,32 @@ const loginAdmin = asyncHandler(async (req, res) => {
 // handle refresh token
 
 const handleRefreshToken = asyncHandler(async (req, res) => {
-  const cookie = req.cookies;
-  if (!cookie.refreshToken) {
-    throw new Error("No Refresh Token in Cookies");
-  }
-  const refreshToken = cookie.refreshToken;
-  const user = await User.findOne({ refreshToken });
+  // const cookie = req.cookies;
+  const email = req.body.email;
+  const refreshToken = req.body.refreshToken;
+
+  console.log(email, refreshToken);
+  // if (!cookie.refreshToken) {
+  //   throw new Error("No Refresh Token in Cookies");
+  // }
+  // const refreshToken = cookie.refreshToken;
+  // const user = await User.findOne({ refreshToken: refreshToken });
+  // const user = await User.findById(id);
+  // const user = await User.findById(id);
+  const user = await User.findOne({ email: email });
+  console.log("user", user);
   if (!user) {
     throw new Error("No Refresh Token present in db or not matched");
   }
   jwt.verify(refreshToken, process.env.JWT_SECRET, (err, decoded) => {
-    if (err || user.id !== decoded.id) {
-      throw new Error("There is something wrong with refresh token");
-    }
+    // if (err || user.id !== decoded.id) {
+    //   throw new Error("There is something wrong with refresh token");
+    // }
+    err && console.log(err);
     const accessToken = generateToken(user?._id);
-    res.json({ accessToken });
+    res.json({ accessToken: accessToken, user: user });
   });
-  res.json(user);
+  // res.json(user);
 });
 
 // Logout functionality
@@ -484,10 +495,21 @@ const getOrders = asyncHandler(async (req, res) => {
   const { _id } = req.user;
   validateMondoDbId(_id);
   try {
-    const getOrders = await Order.findOne({ orderby: _id }).populate(
-      "products.product"
-    );
+    const getOrders = await Order.find({ orderby: _id })
+      .populate("orderby")
+      .populate("products.product");
     res.json(getOrders);
+  } catch (error) {
+    throw new Error(error);
+  }
+});
+
+const getAllOrders = asyncHandler(async (req, res) => {
+  try {
+    const getAllOrders = await Order.find()
+      .populate("products.product")
+      .populate("orderby");
+    res.json(getAllOrders);
   } catch (error) {
     throw new Error(error);
   }
@@ -539,5 +561,6 @@ module.exports = {
   applyVoucher,
   createOrder,
   getOrders,
+  getAllOrders,
   updateOrderStatus,
 };

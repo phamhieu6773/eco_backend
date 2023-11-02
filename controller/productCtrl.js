@@ -37,8 +37,9 @@ const updateProduct = asyncHandler(async (req, res) => {
 
 const deleteProduct = asyncHandler(async (req, res) => {
   const { id } = req.params;
+  validateMondoDbId(id);
   try {
-    const deleteProduct = await Product.findOneAndDelete(id);
+    const deleteProduct = await Product.findByIdAndDelete(id);
     res.json(deleteProduct);
   } catch (error) {
     throw new Error(error);
@@ -53,7 +54,7 @@ const getAllProducts = asyncHandler(async (req, res) => {
     let queryStr = JSON.stringify(queryObj);
     queryStr = queryStr.replace(/\b(gte|gt|lte|lt)\b/g, (match) => `$${match}`);
 
-    let query = Product.find(JSON.parse(queryStr));
+    let query = Product.find(JSON.parse(queryStr)).populate("color");
 
     // Sắp xếp
     if (req.query.sort) {
@@ -94,7 +95,7 @@ const getAllProducts = asyncHandler(async (req, res) => {
 const getaProduct = asyncHandler(async (req, res) => {
   const { id } = req.params;
   try {
-    const getProduct = await Product.findById(id);
+    const getProduct = await Product.findById(id).populate("color");
     res.json({ getProduct });
   } catch (error) {
     throw new Error(error);

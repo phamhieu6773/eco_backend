@@ -21,7 +21,7 @@ var enquirySchema = new mongoose.Schema({
   status: {
     type: String,
     default: "Đã gửi",
-    enum: ["Đã gửi", "Đang xử lý", "Đã giải quyết"],
+    enum: ["Đã gửi", "Đang xử lý", "Đã giải quyết", "Trong tiến trình"],
   },
 });
 
