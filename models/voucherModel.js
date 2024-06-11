@@ -8,6 +8,8 @@ var voucherSchema = new mongoose.Schema({
     unique: true,
     uppercase: true,
   },
+  store_id: { type: mongoose.Schema.Types.ObjectId, ref: "Store" },
+  user_id: { type: mongoose.Schema.Types.ObjectId, ref: "User" },
   expiry: {
     type: Date,
     required: true,
@@ -16,6 +18,10 @@ var voucherSchema = new mongoose.Schema({
     type: Number,
     required: true,
   },
+  number: {
+    type: Number,
+    required: true,
+  }
 });
 
 //Export the model

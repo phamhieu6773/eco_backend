@@ -1,20 +1,19 @@
 const mongoose = require("mongoose"); // Erase if already required
 
 // Declare the Schema of the Mongo model
-var procategorySchema = new mongoose.Schema(
+var nameProductSchema = new mongoose.Schema(
   {
-    title: {
-      type: String,
+    names: {
+      type: [String],
       required: true,
       unique: true,
       index: true,
     },
-    // details: mongoose.Schema.Types.Mixed,
   },
   {
     timestamps: true,
   }
 );
 
-//Export the model
-module.exports = mongoose.model("PCategory", procategorySchema);
+// Export the model
+module.exports = mongoose.model("NamePro", nameProductSchema);

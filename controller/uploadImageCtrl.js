@@ -4,6 +4,7 @@ const validateMondoDbId = require("../utils/validateMongodbId");
 const {
   cloudinaryUploadImage,
   cloudinaryDeleteImage,
+  cloudinaryUploadFile,
 } = require("../utils/cloudinary");
 const fs = require("fs");
 
@@ -48,7 +49,30 @@ const deleteImages = asyncHandler(async (req, res) => {
   }
 });
 
+const uploadFile = asyncHandler(async (req, res) => {
+  try {
+    const uploader = (path) => cloudinaryUploadFile(path, "file");
+    const urls = [];
+    const files = req.files;
+    console.log(files);
+    for (const file of files) {
+      const { path } = file;
+      const newpath = await uploader(path);
+      urls.push(newpath);
+      fs.unlinkSync(path);
+    }
+
+    const filesUpload = urls.map((file) => {
+      return file;
+    });
+    res.json(filesUpload);
+  } catch (error) {
+    throw new Error(error);
+  }
+});
+
 module.exports = {
   uploadImages,
   deleteImages,
+  uploadFile
 };

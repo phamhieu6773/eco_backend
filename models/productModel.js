@@ -20,7 +20,7 @@ var productSchema = new mongoose.Schema(
     },
     price: {
       type: Number,
-      required: true,
+      // required: true,
     },
     category: {
       type: String,
@@ -56,10 +56,23 @@ var productSchema = new mongoose.Schema(
         postedby: { type: mongoose.Schema.Types.ObjectId, ref: "User" },
       },
     ],
+    store_id: { type: mongoose.Schema.Types.ObjectId, ref: "Store" },
+    user_id: { type: mongoose.Schema.Types.ObjectId, ref: "User" },
     totalrating: {
       type: Number,
       default: 0,
     },
+    specs: {
+      type: Array,
+      default: [],
+    },
+    classify: mongoose.Schema.Types.Mixed,
+    variations: [
+      {
+        type: Map,
+        of: String,
+      }
+    ]
   },
   {
     timestamps: true,

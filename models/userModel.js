@@ -26,6 +26,9 @@ var userSchema = new mongoose.Schema(
       type: String,
       required: true,
     },
+    avatar: {
+      type: String,
+    },
     role: {
       type: String,
       default: "user",
@@ -42,7 +45,7 @@ var userSchema = new mongoose.Schema(
       type: String,
     },
     wishlist: [{ type: mongoose.Schema.Types.ObjectId, ref: "Product" }],
-
+    store_id: { type: mongoose.Schema.Types.ObjectId, ref: "Store" },
     refreshToken: {
       type: String,
     },

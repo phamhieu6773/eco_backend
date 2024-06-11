@@ -5,16 +5,24 @@ const {
   uploadPhoto,
   productImgResize,
 } = require("../middlewares/uploadImages");
-const { uploadImages, deleteImages } = require("../controller/uploadImageCtrl");
+const { uploadImages, deleteImages, uploadFile } = require("../controller/uploadImageCtrl");
 const router = express.Router();
 
 router.put(
   "/",
   authMiddleware,
-  isAdmin,
   uploadPhoto.array("images", 10),
   productImgResize,
   uploadImages
+);
+
+router.put(
+  "/uploadfile",
+  // authMiddleware,
+  // uploadPhoto.array("images", 10),
+  uploadPhoto.array("file", 10),
+  // productImgResize,
+  uploadFile
 );
 router.delete("/deleteimg/:id", authMiddleware, isAdmin, deleteImages);
 

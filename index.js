@@ -5,6 +5,7 @@ const dotenv = require("dotenv").config();
 
 const POST = process.env.POST || 4000;
 const authRouter = require("./routes/authRoute");
+const storeRouter = require("./routes/storeRoute");
 const productRouter = require("./routes/productRoute");
 const blogRouter = require("./routes/blogRoute");
 const procategoryRouter = require("./routes/procategoryRoute");
@@ -21,18 +22,22 @@ const cookieParser = require("cookie-parser");
 const morgan = require("morgan");
 const cors = require("cors");
 
+const corsOptions = {
+  origin: ["http://localhost:8080", "http://localhost:3000"],
+  credentials: true,
+  optionsSuccessStatus: 200,
+};
+
 dbConnect();
 
 app.use(morgan("dev"));
-app.use(cors());
+app.use(cors(corsOptions));
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(cookieParser());
-// app.use("/", (req, res) => {
-//   res.send("Hello from server side!");
-// });
 
 app.use("/api/user", authRouter);
+app.use("/api/store", storeRouter);
 app.use("/api/product", productRouter);
 app.use("/api/blog", blogRouter);
 app.use("/api/procategory", procategoryRouter);
